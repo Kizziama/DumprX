@@ -1131,6 +1131,7 @@ if [[ -s "${PROJECT_DIR}"/.github_token ]]; then
 		chmod a+x join_split_files.sh 2>/dev/null
 	fi
 	rm -rf "${TMPDIR}" 2>/dev/null
+	GITPUSH=(git push https://${GITHUB_TOKEN}@github.com/${GIT_ORG}/${repo}.git "${branch}")
 	printf "\nFinal Repository Should Look Like...\n" && ls -lAog
 	printf "\n\nStarting Git Init...\n"
 	git init		# Insure Your Github Authorization Before Running This Script
@@ -1190,18 +1191,26 @@ EOF
 	printf "\nPushing to %s via HTTPS...\nBranch:%s\n" "https://github.com/${GIT_ORG}/${repo}.git" "${branch}"
 	sleep 1
 	git remote add origin https://${GITHUB_TOKEN}@github.com/${GIT_ORG}/${repo}.git "${branch}"
-	git add -- . ':!system/' ':!vendor/'
-	git commit -sm "Add extras for ${description}"
-	git push -u origin "${branch}"
+	git add --all
+	git commit -asm "Add ${description}"
+	git update-ref -d HEAD
+	git reset system/ vendor/ product/
+	git checkout -b "$branch"
+	git commit -asm "Add extras for ${description}" && "${GITPUSH[@]}"
 	git add vendor/
-	git commit -sm "Add vendor for ${description}"
-	git push -u origin "${branch}"
-	git add $(find -type f -name '*.apk')
-	git commit -sm "Add apps for ${description}"
-	git push -u origin "${branch}"
+	git commit -asm "Add vendor for ${description}" && "${GITPUSH[@]}"
+	git add system/system/app/ || git add system/app/
+	git commit -asm "Add system app for ${description}" && "${GITPUSH[@]}"
+	git add system/system/priv-app/ || git add system/priv-app/
+	git commit -asm "Add system priv-app for ${description}" && "${GITPUSH[@]}"
 	git add system/
-	git commit -sm "Add system for ${description}"
-	git push -u origin "${branch}"
+	git commit -asm "Add system for ${description}" && "${GITPUSH[@]}"
+	git add product/app/
+	git commit -asm "Add product app for ${description}" && "${GITPUSH[@]}"
+	git add product/priv-app/
+	git commit -asm "Add product priv-app for ${description}" && "${GITPUSH[@]}"
+	git add product/
+	git commit -asm "Add product for ${description}" && "${GITPUSH[@]}"
 	sleep 1
 	
 	# Telegram channel post
