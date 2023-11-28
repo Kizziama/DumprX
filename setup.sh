@@ -11,15 +11,15 @@ BLUE='\033[0;34m'
 NORMAL='\033[0m'
 
 # Abort Function
-function abort(){
-    [ ! -z "$@" ] && echo -e ${RED}"${@}"${NORMAL}
-    exit 1
+function abort() {
+	[ ! -z "$@" ] && echo -e ${RED}"${@}"${NORMAL}
+	exit 1
 }
 
 # Banner
 function __bannerTop() {
 	echo -e \
-	${GREEN}"
+		${GREEN}"
 	██████╗░██╗░░░██╗███╗░░░███╗██████╗░██████╗░██╗░░██╗
 	██╔══██╗██║░░░██║████╗░████║██╔══██╗██╔══██╗╚██╗██╔╝
 	██║░░██║██║░░░██║██╔████╔██║██████╔╝██████╔╝░╚███╔╝░
@@ -37,52 +37,52 @@ sleep 1
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
 
-    if [[ "$(command -v apt)" != "" ]]; then
+	if [[ "$(command -v apt)" != "" ]]; then
 
-        echo -e ${PURPLE}"Ubuntu/Debian Based Distro Detected"${NORMAL}
-        sleep 1
-        echo -e ${BLUE}">> Updating apt repos..."${NORMAL}
-        sleep 1
-	    sudo apt -y update || abort "Setup Failed!"
-	    sleep 1
-	    echo -e ${BLUE}">> Installing Required Packages..."${NORMAL}
-	    sleep 1
-        sudo apt install -y unace unrar zip unzip p7zip-full p7zip-rar sharutils rar uudeview mpack arj cabextract device-tree-compiler liblzma-dev python3-pip brotli liblz4-tool axel gawk aria2 detox cpio rename liblz4-dev jq || abort "Setup Failed!"
+		echo -e ${PURPLE}"Ubuntu/Debian Based Distro Detected"${NORMAL}
+		sleep 1
+		echo -e ${BLUE}">> Updating apt repos..."${NORMAL}
+		sleep 1
+		sudo apt -y update || abort "Setup Failed!"
+		sleep 1
+		echo -e ${BLUE}">> Installing Required Packages..."${NORMAL}
+		sleep 1
+		sudo apt install -y unace unrar zip unzip p7zip-full p7zip-rar sharutils rar uudeview mpack arj cabextract device-tree-compiler liblzma-dev python3-pip brotli liblz4-tool axel gawk aria2 detox cpio rename liblz4-dev jq || abort "Setup Failed!"
 
-    elif [[ "$(command -v dnf)" != "" ]]; then
+	elif [[ "$(command -v dnf)" != "" ]]; then
 
-        echo -e ${PURPLE}"Fedora Based Distro Detected"${NORMAL}
-        sleep 1
-	    echo -e ${BLUE}">> Installing Required Packages..."${NORMAL}
-	    sleep 1
+		echo -e ${PURPLE}"Fedora Based Distro Detected"${NORMAL}
+		sleep 1
+		echo -e ${BLUE}">> Installing Required Packages..."${NORMAL}
+		sleep 1
 
-	    # "dnf" automatically updates repos before installing packages
-        sudo dnf install -y unace unrar zip unzip sharutils uudeview arj cabextract file-roller dtc python3-pip brotli axel aria2 detox cpio lz4 python3-devel xz-devel p7zip p7zip-plugins || abort "Setup Failed!"
+		# "dnf" automatically updates repos before installing packages
+		sudo dnf install -y unace unrar zip unzip sharutils uudeview arj cabextract file-roller dtc python3-pip brotli axel aria2 detox cpio lz4 python3-devel xz-devel p7zip p7zip-plugins || abort "Setup Failed!"
 
-    elif [[ "$(command -v pacman)" != "" ]]; then
+	elif [[ "$(command -v pacman)" != "" ]]; then
 
-        echo -e ${PURPLE}"Arch or Arch Based Distro Detected"${NORMAL}
-        sleep 1
-	    echo -e ${BLUE}">> Installing Required Packages..."${NORMAL}
-	    sleep 1
+		echo -e ${PURPLE}"Arch or Arch Based Distro Detected"${NORMAL}
+		sleep 1
+		echo -e ${BLUE}">> Installing Required Packages..."${NORMAL}
+		sleep 1
 
-        sudo pacman -Syyu --needed --noconfirm 2>&1 | grep -v "warning: could not get file information" || abort "Setup Failed!"
-        sudo pacman -Sy --noconfirm unace unrar p7zip sharutils uudeview arj cabextract file-roller dtc brotli axel gawk aria2 detox cpio lz4 jq || abort "Setup Failed!"
+		sudo pacman -Syyu --needed --noconfirm 2>&1 | grep -v "warning: could not get file information" || abort "Setup Failed!"
+		sudo pacman -Sy --noconfirm unace unrar p7zip sharutils uudeview arj cabextract file-roller dtc brotli axel gawk aria2 detox cpio lz4 jq || abort "Setup Failed!"
 
-        # Python
-        sleep 1
-        echo -e ${BLUE}">> Creating Required Python3 Symlinks..."${NORMAL}
-        sleep 1
+		# Python
+		sleep 1
+		echo -e ${BLUE}">> Creating Required Python3 Symlinks..."${NORMAL}
+		sleep 1
 
-    fi
+	fi
 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
 
-    echo -e ${PURPLE}"macOS Detected"${NORMAL}
-    sleep 1
+	echo -e ${PURPLE}"macOS Detected"${NORMAL}
+	sleep 1
 	echo -e ${BLUE}">> Installing Required Packages..."${NORMAL}
 	sleep 1
-    brew install protobuf xz brotli lz4 aria2 detox coreutils p7zip gawk || abort "Setup Failed!"
+	brew install protobuf xz brotli lz4 aria2 detox coreutils p7zip gawk || abort "Setup Failed!"
 
 fi
 
